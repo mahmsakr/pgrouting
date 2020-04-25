@@ -68,12 +68,10 @@ PERL5LIB=$(echo pwd)
 export PERL5LIB
 perl tools/testers/doc_queries_generator.pl -pgisver "${POSTGIS_VER}" -pgport "${PGPORT}"
 
-#pgTap tests disable for now until we have installed
-if false; then
+#pgTap tests
 psql -c "CREATE DATABASE ___pgr___test___"
 sh tools/testers/pg_prove_tests.sh "${PGUSER}"
 psql -c "DROP DATABASE ___pgr___test___"
-fi
 
 #stop the postgres server
 state=$("${PGPATH}"/bin/pg_ctl status -D "${PGDATA}" -l "${PGPATH}"/data/logfile | grep "server is running")
