@@ -20,7 +20,7 @@ mkdir "${WORKSPACE}/build${BRANCH}"
 cmake --version
 
 cd "../build${BRANCH}"
-cmake "../${BRANCH}"
+cmake -DCMAKE_BUILD_TYPE=Release "../${BRANCH}"
 
 make
 sudo make install
