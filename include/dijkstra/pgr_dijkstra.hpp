@@ -50,10 +50,14 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 #include "cpp_common/basePath_SSEC.hpp"
 #include "cpp_common/pgr_base_graph.hpp"
 #include "visitors/dijkstra_one_goal_visitor.hpp"
-
 #if 0
 #include "./../../common/src/signalhandler.h"
 #endif
+
+extern "C" {
+#include "postgres.h"
+#include "miscadmin.h"
+}
 
 namespace pgrouting {
 
@@ -322,6 +326,7 @@ class Pgr_dijkstra {
         }
 
         for (const auto &start_ends : vertex_map) {
+            CHECK_FOR_INTERRUPTS();
             auto r_paths = dijkstra(
                     graph,
                     start_ends.first, start_ends.second,
