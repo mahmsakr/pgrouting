@@ -326,7 +326,12 @@ class Pgr_dijkstra {
         }
 
         for (const auto &start_ends : vertex_map) {
+            /*
+             * If an interrupt arrives, e.g. the query is being cancelled,
+             * CHECK_FOR_INTERRUPTS() will be called, which then throws an error
+             */
             CHECK_FOR_INTERRUPTS();
+
             auto r_paths = dijkstra(
                     graph,
                     start_ends.first, start_ends.second,
