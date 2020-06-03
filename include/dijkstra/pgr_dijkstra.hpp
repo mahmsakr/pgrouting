@@ -28,6 +28,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 #define INCLUDE_DIJKSTRA_PGR_DIJKSTRA_HPP_
 #pragma once
 
+
 #include <boost/config.hpp>
 #include <boost/graph/adjacency_list.hpp>
 #include "c_types/pgr_combination_t.h"
@@ -54,10 +55,18 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 #include "./../../common/src/signalhandler.h"
 #endif
 
+/*
+ * Suppress the -Wpedantic warning temporarily about the postgres file
+ */
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wpedantic"
 extern "C" {
 #include "postgres.h"
 #include "miscadmin.h"
 }
+#pragma GCC diagnostic pop
+
+
 
 namespace pgrouting {
 
@@ -304,6 +313,7 @@ class Pgr_dijkstra {
          return paths;
      }
 
+
     // preparation for parallel arrays
     std::deque<Path> dijkstra(
             G &graph,
@@ -316,6 +326,7 @@ class Pgr_dijkstra {
         // group targets per distinct source
         std::map<int64_t , std::vector<int64_t> > vertex_map;
         for (const pgr_combination_t &comb : combinations){
+
             std::map< int64_t , std::vector<int64_t> >::iterator it= vertex_map.find(comb.source);
             if (it != vertex_map.end()) {
                 it->second.push_back(comb.target);
@@ -331,7 +342,7 @@ class Pgr_dijkstra {
              * CHECK_FOR_INTERRUPTS() will be called, which then throws an error
              */
             CHECK_FOR_INTERRUPTS();
-
+            
             auto r_paths = dijkstra(
                     graph,
                     start_ends.first, start_ends.second,
